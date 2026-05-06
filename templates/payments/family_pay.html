@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Registration - Mortic</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f0f2f5; }
+        .card-family { border-radius: 1rem; border: 2px solid #0d6efd; }
+        .btn-pay { border-radius: 0.5rem; font-weight: 600; padding: 0.8rem; transition: 0.3s; }
+        .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3); }
+        .badge-popular { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4 position-relative">
+            <!-- Popular Badge -->
+            <span class="badge badge-popular rounded-pill bg-warning text-dark px-3 py-2 fw-bold shadow-sm">
+                MOST CHOSEN
+            </span>
+
+            <!-- Family Plan Card -->
+            <div class="card card-family shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-4" style="border-radius: 0.9rem 0.9rem 0 0;">
+                    <h2 class="fw-bold mb-0">Family Plan</h2>
+                    <p class="mb-0 opacity-75">Full Household Coverage</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h1 class="display-4 fw-bold text-primary">₱300</h1>
+                        <p class="text-muted">Secure your family via GCash</p>
+                    </div>
+
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="bi bi-people-fill text-primary me-2"></i> Multiple Member Coverage</li>
+                        <li class="mb-2"><i class="bi bi-shield-check text-success me-2"></i> Priority Support Access</li>
+                        <li class="mb-2"><i class="bi bi-star-fill text-warning me-2"></i> Enhanced Premium Badge</li>
+                    </ul>
+
+                    <!-- Payment Form -->
+                    <form action="{% url 'payments:process_payment' %}" method="POST" id="familyForm">
+                        {% csrf_token %}
+                        <!-- Hidden input to tell views.py this is a Family plan -->
+                        <input type="hidden" name="plan_choice" value="Family">
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Registered Email</label>
+                            <input type="email" class="form-control bg-light border-0" value="{{ user.email }}" readonly>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-pay w-100 shadow-sm">
+                            <i class="bi bi-wallet2 me-2"></i> Pay ₱300 with GCash
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card-footer bg-white border-0 text-center pb-4">
+                    <a href="{% url 'payments:mortuary' %}" class="text-decoration-none small text-muted">
+                        <i class="bi bi-arrow-left"></i> Change Plan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Loading state for Family payment
+    document.getElementById('familyForm').onsubmit = function() {
+        const btn = this.querySelector('button');
+        btn.disabled = true;
+        btn.classList.replace('btn-primary', 'btn-secondary');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing Family Plan...';
+    };
+</script>
+
+</body>
+</html>

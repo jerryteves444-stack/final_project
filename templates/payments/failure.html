@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="card shadow p-5 border-danger">
+        <div class="display-1 text-danger mb-3">⚠</div>
+        <h2 class="fw-bold">Payment Failed</h2>
+        <p class="text-muted">Something went wrong with your GCash transaction.</p>
+        
+        {% if error %}
+        <div class="alert alert-secondary small text-start">
+            <strong>Error details:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="d-grid gap-2 d-md-block mt-4">
+            <a href="{% url 'payments:payments' %}" class="btn btn-outline-dark">Try Again</a>
+            <a href="mailto:support@mortic.app" class="btn btn-link text-decoration-none">Contact Support</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Mortuary Registration</h1>
+        <p class="text-muted">Choose your plan to unlock premium features via GCash.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Solo Plan Card -->
+        <div class="col-md-5 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4 text-center">
+                    <h3 class="fw-bold">Solo</h3>
+                    <h2 class="text-primary my-3">₱500</h2>
+                    <p class="text-muted mb-4">Single Person .</p>
+
+                    <!-- Registration Form for Solo -->
+                    <form action="{% url 'checkout' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan_choice" value="Solo">
+                        <button type="submit" class="btn btn-outline-primary w-100 py-2 fw-bold">
+                            Register Solo Plan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Plan Card -->
+        <div class="col-md-5 col-lg-4">
+            <div class="card h-100 border-primary shadow-lg position-relative">
+                <div class="card-body p-4 text-center">
+                    <h3 class="fw-bold">Family</h3>
+                    <h2 class="text-primary my-3">₱2,000</h2>
+                    <p class="text-muted mb-4">Register your whole family.</p>
+
+                    <!-- Registration Form for Family -->
+                    <form action="{% url 'checkout' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan_choice" value="Family">
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                            Register Family Plan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="text-center mt-5">
+        <a href="/" class="btn btn-link text-muted">← Return to Mortic Home</a>
+    </div>
+</div>
+{% endblock %}

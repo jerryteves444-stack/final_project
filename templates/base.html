@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortic | Web Development</title>
+    <!-- Bootstrap 5 for your grids and cards -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar-brand { fw-bold; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">MORTIC</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        <!-- Content from checkout.html or success.html will appear here -->
+        {% endblock %}
+    </div>
+
+    <footer class="py-4 mt-5 border-top bg-white">
+        <div class="container text-center text-muted">
+            <small>&copy; 2026 Mortic Web Solutions. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

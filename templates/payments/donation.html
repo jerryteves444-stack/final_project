@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Donation - Mortic</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #fdfdfd; }
+        .card-donation { border-radius: 1.5rem; border: none; }
+        .btn-donate { border-radius: 0.75rem; font-weight: 700; padding: 1rem; background-color: #dc3545; border: none; color: white; transition: 0.3s; }
+        .btn-donate:hover { background-color: #bb2d3b; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4); }
+        .heart-icon { font-size: 3rem; color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card card-donation shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="heart-icon mb-2">
+                            <i class="bi bi-heart-fill"></i>
+                        </div>
+                        <h2 class="fw-bold">Community Support</h2>
+                        <p class="text-muted">Your contribution helps provide dignity and support to members in need.</p>
+                    </div>
+
+                    <!-- Donation Form -->
+                    <form action="{% url 'payments:process_mortuary_payment' %}" method="POST" id="donationForm">
+                        {% csrf_token %}
+                        <!-- Tells views.py to use the donation price logic -->
+                        <input type="hidden" name="plan_choice" value="Donation">
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted small text-uppercase">Enter Donation Amount</label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-white border-end-0 text-primary fw-bold">₱</span>
+                                <input type="number" name="donation_amount" class="form-control border-start-0 ps-0"
+                                       placeholder="500.00" min="1" step="any" required autofocus>
+                            </div>
+                            <div class="form-text mt-2">Suggested: ₱100, ₱500, or ₱1,000</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Donor Account</label>
+                            <input type="email" class="form-control bg-light border-0" value="{{ user.email }}" readonly>
+                        </div>
+
+                        <button type="submit" class="btn btn-donate w-100 shadow-sm">
+                            <i class="bi bi-heart me-2"></i> Process with GCash
+                        </button>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'payments:mortuary' %}" class="text-decoration-none small text-muted">
+                            <i class="bi bi-arrow-left"></i> Return to Mortuary Plans
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted small">
+                    <i class="bi bi-shield-lock-fill me-1"></i> Securely processed via Xendit
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Handle loading state to prevent double clicking
+    document.getElementById('donationForm').onsubmit = function() {
+        const btn = this.querySelector('button');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Preparing Donation...';
+    };
+</script>
+
+</body>
+</html>

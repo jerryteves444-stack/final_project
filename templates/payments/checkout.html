@@ -1,0 +1,80 @@
+{% extends 'payments.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">Mortic Premium</h2>
+                    <p class="text-muted text-center mb-4">Select a plan to upgrade your account and access exclusive features.</p>
+
+                    <form action="{% url 'process_payment' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- Plan Selection Grid -->
+                        <div class="row g-3 mb-4">
+                            <!-- Solo Plan -->
+                            <div class="col-6">
+                                <input type="radio" class="btn-check" name="plan_choice" id="planSolo" value="Solo" checked>
+                                <label class="btn btn-outline-primary w-100 py-3 h-100" for="planSolo">
+                                    <span class="d-block fw-bold fs-5">Solo</span>
+                                    <span class="d-block text-dark mt-1">₱500</span>
+                                    <small class="text-muted">1 User</small>
+                                </label>
+                            </div>
+
+                            <!-- Family Plan -->
+                            <div class="col-6">
+                                <input type="radio" class="btn-check" name="plan_choice" id="planFamily" value="Family">
+                                <label class="btn btn-outline-primary w-100 py-3 h-100" for="planFamily">
+                                    <span class="d-block fw-bold fs-5">Family</span>
+                                    <span class="d-block text-dark mt-1">₱1,500</span>
+                                    <small class="text-muted">Up to 5 Users</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method Preview -->
+                        <div class="bg-light p-3 rounded mb-4 d-flex align-items-center justify-content-between">
+                            <span class="text-muted">Payment Method:</span>
+                            <div class="d-flex align-items-center">
+                                <strong class="me-2">GCash</strong>
+                                <span class="badge bg-success text-white">✓ Available</span>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold">
+                            Proceed to GCash
+                        </button>
+                    </form>
+                    
+                    <div class="mt-4 text-center">
+                        <small class="text-muted">
+                            Powered by <strong>Xendit</strong>. Secure encrypted transaction.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styling to make the radio buttons look like selectable cards */
+    .btn-check:checked + .btn-outline-primary {
+        background-color: rgba(13, 110, 253, 0.05);
+        border-width: 2px;
+    }
+    .btn-outline-primary {
+        border-color: #dee2e6;
+        transition: all 0.2s ease-in-out;
+    }
+    .btn-outline-primary:hover {
+        border-color: #0d6efd;
+        background-color: transparent;
+        color: #0d6efd;
+    }
+</style>
+{% endblock %}

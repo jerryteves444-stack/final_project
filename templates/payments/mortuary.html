@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Mortuary Payment</h1>
+        <p class="text-muted">Support your members through these plans or a direct contribution.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Solo Plan Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4 text-center d-flex flex-column">
+                    <h3 class="fw-bold">Solo</h3>
+                    <h2 class="text-primary my-3">₱125</h2>
+                    <p class="text-muted mb-4">Single Person Coverage.</p>
+
+                    <form action="{% url 'payments:process_mortuary_payment' %}" method="POST" class="mt-auto">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan_choice" value="Solo">
+                        <button type="submit" class="btn btn-outline-primary w-100 py-2 fw-bold">
+                           Solo Pay
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Plan Card -->
+        <div class="col-md-4">
+            <div class="card h-100 border-primary shadow-lg position-relative">
+                <div class="card-body p-4 text-center d-flex flex-column">
+                    <h3 class="fw-bold">Family</h3>
+                    <h2 class="text-primary my-3">₱300</h2>
+                    <p class="text-muted mb-4">Full Family's Payment.</p>
+
+                    <form action="{% url 'payments:process_mortuary_payment' %}" method="POST" class="mt-auto">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan_choice" value="Family">
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                          Family Pay
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donation Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 bg-light">
+                <div class="card-body p-4 text-center d-flex flex-column">
+                    <h3 class="fw-bold">Donation</h3>
+                    <p class="text-muted my-3">Enter any amount to help support the community.</p>
+
+                    <form action="{% url 'payments:process_mortuary_payment' %}" method="POST" class="mt-auto">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan_choice" value="Donation">
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-white">₱</span>
+                            <input type="number" name="donation_amount" class="form-control" placeholder="0.00" min="1" step="any" required>
+                        </div>
+
+                        <a href="{% url 'payments:donation' %}" class="btn btn-lg btn-dark w-100">Donate Now</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="text-center mt-5">
+        <a href="/" class="btn btn-link text-muted">← Return to Mortic Home</a>
+    </div>
+</div>
+{% endblock %}

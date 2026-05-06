@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-4">
+                <!-- Header with "Most Popular" Badge -->
+                <div class="card-header bg-dark text-white text-center py-4 rounded-top-4 position-relative">
+                    <div class="position-absolute top-0 start-50 translate-middle">
+                        <span class="badge rounded-pill bg-primary px-3 shadow">BEST VALUE</span>
+                    </div>
+                    <h2 class="fw-bold mb-0 mt-2">Family Registration</h2>
+                    <p class="mb-0 opacity-75">Group & Household Protection</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h1 class="display-4 fw-bold text-primary">₱2,000</h1>
+                        <p class="text-muted">One-time payment for the whole group</p>
+                    </div>
+
+                    <div class="bg-light p-3 rounded-3 mb-4">
+                        <h6 class="fw-bold text-uppercase small mb-3">Plan Includes:</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-people-fill text-primary me-2"></i> Register up to 5 family members</li>
+                            <li class="mb-2"><i class="bi bi-patch-check-fill text-primary me-2"></i> Verified "Family" badge on all profiles</li>
+                            <li class="mb-2"><i class="bi bi-shield-lock-fill text-primary me-2"></i> Priority Support for the group</li>
+                        </ul>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <form action="{% url 'payments:checkout' %}" method="POST" id="familyForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan_choice" value="Family">
+                        
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Primary Contact</label>
+                            <div class="p-2 border rounded bg-light d-flex align-items-center">
+                                <i class="bi bi-person-circle me-2 text-muted"></i>
+                                <span>{{ user.username }}</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold py-3 shadow">
+                            Complete via GCash
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card-footer bg-white border-0 text-center pb-4">
+                    <a href="{% url 'payments:payments' %}" class="text-decoration-none small text-muted">
+                            <i class="bi bi-arrow-left"></i> View other plans
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('familyForm').onsubmit = function() {
+        const btn = this.querySelector('button');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Connecting to GCash...';
+    };
+</script>
+{% endblock %}

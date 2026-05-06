@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortic Admin - Xendit Payment Analytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Deep purple for professional feel */
+            --border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        body { background-color: var(--bg-color); font-family: 'Inter', system-ui, sans-serif; }
+        .glass-header { background: var(--primary-gradient); color: white; padding: 2.5rem 0; margin-bottom: 2rem; }
+        .glass-card { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .table-glass td, .table-glass th { padding: 1rem; vertical-align: middle; }
+        .status-badge { padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .btn-back { color: white; text-decoration: none; opacity: 0.9; }
+        .btn-back:hover { opacity: 1; color: white; }
+    </style>
+</head>
+<body>
+
+<header class="glass-header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{% url 'home' %}" class="btn-back mb-2 d-inline-block small text-uppercase fw-bold"><i class="bi bi-arrow-left"></i> Back to Mortic</a>
+                <h1 class="h2 fw-bold mb-0">Xendit Payment Dashboard</h1>
+                <p class="mb-0 opacity-75">Monitoring Solo & Family Plan Registrations</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-light text-dark rounded-pill px-3 py-2 border shadow-sm">
+                    <i class="bi bi-shield-check text-primary"></i> Super Admin
+                </span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <!-- Analytics Overview -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-3">
+            <div class="glass-card text-center">
+                <small class="text-muted text-uppercase fw-bold">Total Sales</small>
+                <h3 class="fw-bold mt-2">₱{{ total_revenue|default:"0" }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card text-center">
+                <small class="text-muted text-uppercase fw-bold">Total Entries</small>
+                <h3 class="fw-bold mt-2">{{ payments.count }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card text-center">
+                <small class="text-muted text-uppercase fw-bold">Xendit Status</small>
+                <h3 class="fw-bold text-success mt-2"><i class="bi bi-broadcast"></i> LIVE</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card text-center">
+                <small class="text-muted text-uppercase fw-bold">System Mode</small>
+                <h3 class="fw-bold text-primary mt-2">Production</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Table -->
+    <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0">Recent Plan Registrations</h5>
+            <button class="btn btn-sm btn-outline-secondary" onclick="window.location.reload()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Subscriber</th>
+                        <th>Plan Type</th>
+                        <th>Amount</th>
+                        <th>Xendit External ID</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px; font-weight: bold;">
+                                    {{ payment.user.username|slice:":1"|upper }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">{{ payment.user.username }}</div>
+                                    <div class="small text-muted">{{ payment.user.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {% if payment.plan_requested == 'Family' %}
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2">FAMILY</span>
+                            {% else %}
+                                <span class="badge bg-info-subtle text-info border border-info-subtle px-2">SOLO</span>
+                            {% endif %}
+                        </td>
+                        <td class="fw-bold text-dark">₱{{ payment.amount }}</td>
+                        <td><code class="text-muted" style="font-size: 0.8rem;">{{ payment.external_id }}</code></td>
+                        <td>
+                            {% if payment.status == 'completed' or payment.status == 'paid' %}
+                                <span class="status-badge bg-success-subtle text-success border border-success">PAID</span>
+                            {% elif payment.status == 'pending' %}
+                                <span class="status-badge bg-warning-subtle text-warning border border-warning">WAITING</span>
+                            {% else %}
+                                <span class="status-badge bg-danger-subtle text-danger border border-danger">FAILED</span>
+                            {% endif %}
+                        </td>
+                        <td class="small text-muted">{{ payment.created_at|date:"M d, Y" }}<br>{{ payment.created_at|date:"H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2rem;"></i>
+                            <span class="text-muted">No registration records found in the database.</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
